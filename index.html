@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Encuesta de Evaluación | Proyecto</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #e9f0f5 0%, #d9e2ec 100%);
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            padding: 2rem 1rem;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Tarjeta principal */
+        .form-card {
+            max-width: 850px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 2rem;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.35);
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        /* Encabezado */
+        .form-header {
+            background: #1e3c5c;
+            color: white;
+            padding: 1.8rem 2rem;
+            text-align: center;
+        }
+
+        .form-header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-header p {
+            font-size: 0.95rem;
+            opacity: 0.85;
+            margin-top: 0.3rem;
+        }
+
+        .qr-note {
+            background: rgba(255,255,255,0.2);
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            margin-top: 0.6rem;
+            font-weight: 500;
+        }
+
+        /* Cuerpo del formulario */
+        .form-body {
+            padding: 2rem 2rem 1.8rem;
+        }
+
+        /* Cada grupo de pregunta */
+        .question-group {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #eef2f7;
+            padding-bottom: 1.4rem;
+        }
+
+        .question-group:last-of-type {
+            border-bottom: none;
+            margin-bottom: 1rem;
+        }
+
+        .question-text {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #0a2b3e;
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .badge-cerrada {
+            background: #eef2fa;
+            color: #1e4663;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-abierta {
+            background: #f0eef9;
+            color: #4a2f7c;
+        }
+
+        .required-asterisk {
+            color: #c0392b;
+            font-size: 0.9rem;
+            margin-left: 4px;
+        }
+
+        /* Opciones horizontales / flex */
+        .options-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem 1.8rem;
+            margin-top: 0.3rem;
+            align-items: center;
+        }
+
+        .option-radio {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            background: #f9fbfd;
+            padding: 0.4rem 0.8rem;
+            border-radius: 40px;
+            transition: background 0.2s;
+            border: 1px solid #e2e8f0;
+        }
+
+        .option-radio:hover {
+            background: #eef3fc;
+            border-color: #bdd4e7;
+        }
+
+        .option-radio input {
+            width: 1.1rem;
+            height: 1.1rem;
+            accent-color: #1e5c8b;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .option-radio label {
+            font-weight: 500;
+            color: #1f3b4c;
+            font-size: 0.95rem;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        /* textarea abierta */
+        .textarea-field {
+            margin-top: 0.6rem;
+        }
+
+        .textarea-field textarea {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            border-radius: 1.2rem;
+            border: 1px solid #cfdfed;
+            font-family: inherit;
+            font-size: 0.95rem;
+            resize: vertical;
+            transition: 0.2s;
+            background: #fefefe;
+        }
+
+        .textarea-field textarea:focus {
+            outline: none;
+            border-color: #1e5c8b;
+            box-shadow: 0 0 0 3px rgba(30,92,139,0.2);
+        }
+
+        /* Botones y feedback */
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-submit {
+            background: #1e5c8b;
+            border: none;
+            padding: 0.9rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            border-radius: 60px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+
+        .btn-submit:hover {
+            background: #0f4468;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .btn-reset {
+            background: #eef2f7;
+            border: none;
+            padding: 0.8rem 1.6rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #2c4e6e;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-reset:hover {
+            background: #e2e8f0;
+        }
+
+        .error-message {
+            color: #c0392b;
+            font-size: 0.8rem;
+            margin-top: 0.6rem;
+            background: #ffeaea;
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            display: inline-block;
+        }
+
+        .info-note {
+            background: #f0f7fe;
+            border-radius: 1rem;
+            padding: 0.8rem 1rem;
+            font-size: 0.8rem;
+            color: #1e5c8b;
+            margin-top: 1.5rem;
+            border-left: 4px solid #1e5c8b;
+        }
+
+        .info-note i {
+            font-style: normal;
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #6c8eaa;
+            border-top: 1px solid #e2edf5;
+            padding: 1rem;
+            background: #fafdff;
+        }
+
+        @media (max-width: 600px) {
+            .form-body {
+                padding: 1.5rem;
+            }
+            .options-container {
+                gap: 0.7rem;
+            }
+            .option-radio {
+                padding: 0.3rem 0.7rem;
+            }
+            .btn-submit, .btn-reset {
+                width: 100%;
+                justify-content: center;
+            }
+            .actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="form-card">
+    <div class="form-header">
+        <h1> Evaluación del producto</h1>
+        <p>Tu opinión es fundamental</p>
+        <div class="qr-note">Respuestas anónimas</div>
+    </div>
+
+    <div class="form-body">
+        <form id="surveyForm" novalidate>
+            <!-- PREGUNTA A -->
+            <div class="question-group" id="groupA">
+                <div class="question-text">
+                    a) ¿Qué te pareció la app?
+                    <span class="badge-cerrada"
+                    <span class="required-asterisk"></span>
+                </div>
+                <div class="options-container" role="radiogroup" aria-label="Opinión presentación">
+                    <label class="option-radio">
+                        <input type="radio" name="pregunta_a" value="muy buena"> 
+                        <span>Muy buena</span>
+                    </label>
+                    <label class="option-radio">
+                        <input type="radio" name="pregunta_a" value="buena"> 
+                        <span>Buena</span>
+                    </label>
+                    <label class="option-radio">
+                        <input type="radio" name="pregunta_a" value="mas o menos"> 
+                        <span> Más o menos</span>
+                    </label>
+                    <label class="option-radio">
+                        <input type="radio" name="pregunta_a" value="mala"> 
+                        <span> Mala</span>
+                    </label>
+                </div>
+                <div class="error-field" id="errorA" style="display:none;" aria-live="polite"></div>
+            </div>
+
+            <!-- PREGUNTA B -->
+            <div class="question-group" id="groupB">
+                <div class="question-text">
+                    b) ¿Te gustó la propuesta del proyecto?
+                    <span class="badge-cerrada">
+                    <span class="required-asterisk"></span>
+                </div>
+                <div class="options-container" role="radiogroup" aria-label="Gusto por la propuesta">
+                    <label class="option-radio">
+                        <input type="radio" name="pregunta_b" value="si"> 
+                        <span>Sí, me gustó</span>
+                    </label>
+                    <label class="option-radio">
+                        <input type="radio" name="pregunta_b" value="no"> 
+                        <span> No me gustó</span>
+                    </label>
+                </div>
+                <div class="error-field" id="errorB" style="display:none;"></div>
+            </div>
+
+            <!-- PREGUNTA C -->
+            <div class="question-group" id="groupC">
+                <div class="question-text">
+                    c) ¿La navegación entre las nuevas secciones te pareció intuitiva?
+                    <span class="badge-cerrada">
+                    <span class="required-asterisk"></span>
+                </div>
+                <div class="options-container" role="radiogroup" aria-label="Claridad navegación">
+                    <label class="option-radio">
+                        <input type="radio" name="pregunta_c" value="clara"> 
+                        <span>Clara</span>
+                    </label>
+                    <label class="option-radio">
+                        <input type="radio" name="pregunta_c" value="poco clara"> 
+                        <span>Poco clara</span>
+                    </label>
+                    <label class="option-radio">
+                        <input type="radio" name="pregunta_c" value="consufa"> 
+                        <span> Confusa</span>
+                    </label>
+                </div>
+                <div class="error-field" id="errorC" style="display:none;"></div>
+            </div>
+
+            <!-- PREGUNTA D -->
+            <div class="question-group" id="groupD">
+                <div class="question-text">
+                    d) ¿Consideras útiles las nuevas incorporaciones?
+                    <span class="badge-cerrada">
+                    <span class="required-asterisk"></span>
+                </div>
+                <div class="options-container" role="radiogroup" aria-label="Utilidad incorporaciones">
+                    <label class="option-radio">
+                        <input type="radio" name="pregunta_d" value="si"> 
+                        <span> Sí, son útiles</span>
+                    </label>
+                    <label class="option-radio">
+                        <input type="radio" name="pregunta_d" value="no"> 
+                        <span> No son útiles</span>
+                    </label>
+                </div>
+                <div class="error-field" id="errorD" style="display:none;"></div>
+            </div>
+
+            <!-- PREGUNTA E (abierta) -->
+            <div class="question-group">
+                <div class="question-text">
+                    e) ¿Qué mejorarías / cambiarías?
+                    <span class="badge-cerrada badge-abierta"></span>
+                </div>
+                <div class="textarea-field">
+                    <textarea id="pregunta_e" name="mejoras" rows="3" placeholder="Escribe tus sugerencias, ideas o críticas constructivas... (obligatoria)"></textarea>
+                </div>
+            </div>
+
+            <!-- Botones y notas -->
+            <div class="actions">
+                <button type="button" class="btn-submit" id="sendMailBtn">📧 Enviar respuestas por correo</button>
+                <button type="button" class="btn-reset" id="resetFormBtn">🗑️ Limpiar todo</button>
+            </div>
+
+            <div id="globalErrorMsg" class="error-message" style="display: none;"></div>
+            <div class="info-note">
+                <i>✉️ ¿Cómo funciona?</i> Al enviar, se abrirá tu cliente de correo predeterminado con todas tus respuestas. Solo debes pulsar "enviar". <strong></strong>
+            </div>
+        </form>
+    </div>
+    <footer>
+        Sin necesidad de login · Datos enviados de forma anónima vía email · Compatible con celular/tablet
+    </footer>
+</div>
+
+<script>
+    (function() {
+        // ---------- CONFIGURACIÓN DEL CORREO ----------
+        // CAMBIA AQUÍ la dirección de correo destino (donde recibirás las encuestas)
+        const RECIPIENT_EMAIL = "tusrespuestas@ejemplo.com";   // <-- Sustituir por correo real
+        // Asunto del correo
+        const EMAIL_SUBJECT = "Respuestas evaluación del proyecto - Formulario anónimo";
+        
+        // Elementos del DOM
+        const form = document.getElementById('surveyForm');
+        const sendBtn = document.getElementById('sendMailBtn');
+        const resetBtn = document.getElementById('resetFormBtn');
+        const globalErrorDiv = document.getElementById('globalErrorMsg');
+        
+        // grupos de errores individuales (opcionales)
+        const errorA = document.getElementById('errorA');
+        const errorB = document.getElementById('errorB');
+        const errorC = document.getElementById('errorC');
+        const errorD = document.getElementById('errorD');
+        
+        // función para limpiar mensajes de error previos
+        function clearErrors() {
+            if (errorA) { errorA.style.display = 'none'; errorA.innerHTML = ''; }
+            if (errorB) { errorB.style.display = 'none'; errorB.innerHTML = ''; }
+            if (errorC) { errorC.style.display = 'none'; errorC.innerHTML = ''; }
+            if (errorD) { errorD.style.display = 'none'; errorD.innerHTML = ''; }
+            if (globalErrorDiv) globalErrorDiv.style.display = 'none';
+        }
+        
+        // mostrar error específico en grupo
+        function showGroupError(groupId, message) {
+            let errorContainer;
+            switch(groupId) {
+                case 'pregunta_a': errorContainer = errorA; break;
+                case 'pregunta_b': errorContainer = errorB; break;
+                case 'pregunta_c': errorContainer = errorC; break;
+                case 'pregunta_d': errorContainer = errorD; break;
+                default: return;
+            }
+            if (errorContainer) {
+                errorContainer.innerHTML = `<span class="error-message" style="display:inline-block; margin-top:8px;">⚠️ ${message}</span>`;
+                errorContainer.style.display = 'block';
+                // scroll suave al primer error
+                const groupElement = document.getElementById(`group${groupId.charAt(groupId.length-1).toUpperCase()}`);
+                if(groupElement) groupElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+        
+        // Validar que todos los grupos cerrados tengan respuesta
+        function validateClosedQuestions() {
+            let isValid = true;
+            clearErrors();
+            
+            // pregunta A
+            const aSelected = document.querySelector('input[name="pregunta_a"]:checked');
+            if (!aSelected) {
+                showGroupError('pregunta_a', 'Debes seleccionar una opción para la presentación.');
+                isValid = false;
+            }
+            
+            // pregunta B
+            const bSelected = document.querySelector('input[name="pregunta_b"]:checked');
+            if (!bSelected) {
+                showGroupError('pregunta_b', 'Responde si la propuesta del proyecto te gustó o no.');
+                isValid = false;
+            }
+            
+            // pregunta C
+            const cSelected = document.querySelector('input[name="pregunta_c"]:checked');
+            if (!cSelected) {
+                showGroupError('pregunta_c', 'Indica cómo te pareció la navegación (clara, poco clara o confusa).');
+                isValid = false;
+            }
+            
+            // pregunta D
+            const dSelected = document.querySelector('input[name="pregunta_d"]:checked');
+            if (!dSelected) {
+                showGroupError('pregunta_d', 'Por favor, responde si consideras útiles las nuevas incorporaciones.');
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+        
+        // Obtener el texto legible de cada respuesta (formateado para el correo)
+        function getFormattedResponses() {
+            // Obtener valores seleccionados
+            const aVal = document.querySelector('input[name="pregunta_a"]:checked')?.value || 'No respondida';
+            const bVal = document.querySelector('input[name="pregunta_b"]:checked')?.value || 'No respondida';
+            const cVal = document.querySelector('input[name="pregunta_c"]:checked')?.value || 'No respondida';
+            const dVal = document.querySelector('input[name="pregunta_d"]:checked')?.value || 'No respondida';
+            const eText = document.getElementById('pregunta_e')?.value.trim() || '(Sin sugerencias)';
+            
+            // Mapeo para mostrar más amigable en correo
+            const aMap = {
+                'muy buena': '🌟 Muy buena', 'buena': '👍 Buena', 
+                'mas o menos': '😐 Más o menos', 'mala': '👎 Mala'
+            };
+            const bMap = { 'si': 'Sí, me gustó', 'no': 'No me gustó' };
+            const cMap = { 'clara': 'Clara', 'poco clara': 'Poco clara', 'consufa': 'Confusa (texto original: consufa)' };
+            const dMap = { 'si': 'Sí, útiles', 'no': 'No, no las considero útiles' };
+            
+            const aDisplay = aMap[aVal] || aVal;
+            const bDisplay = bMap[bVal] || bVal;
+            const cDisplay = cMap[cVal] || cVal;
+            const dDisplay = dMap[dVal] || dVal;
+            
+            // Fecha y hora del envío
+            const now = new Date();
+            const fechaHora = now.toLocaleString('es-ES', { dateStyle: 'full', timeStyle: 'short' });
+            
+            let body = `📊 RESPUESTAS FORMULARIO EVALUACIÓN 📊\n\n`;
+            body += `🗓️ Fecha envío: ${fechaHora}\n`;
+            body += `────────────────────────────────────\n\n`;
+            body += `🔹 a) ¿Qué te pareció la presentación?\n   ➜ ${aDisplay}\n\n`;
+            body += `🔹 b) ¿Te gustó la propuesta del proyecto?\n   ➜ ${bDisplay}\n\n`;
+            body += `🔹 c) Navegación entre nuevas secciones:\n   ➜ ${cDisplay}\n\n`;
+            body += `🔹 d) ¿Consideras útiles las nuevas incorporaciones?\n   ➜ ${dDisplay}\n\n`;
+            body += `🔹 e) ¿Qué mejorarías / cambiarías? (sugerencias abiertas)\n   ➜ ${eText}\n\n`;
+            body += `────────────────────────────────────\n`;
+            body += `✨ Encuesta anónima · Sin registro. Muchas gracias por tu opinión.`;
+            
+            return body;
+        }
+        
+        // Función principal para enviar por mailto
+        function sendViaEmail() {
+            // 1. Validar preguntas cerradas
+            const isValid = validateClosedQuestions();
+            if (!isValid) {
+                if (globalErrorDiv) {
+                    globalErrorDiv.style.display = 'block';
+                    globalErrorDiv.innerHTML = '❌ No se pudo enviar: responde todas las preguntas obligatorias (marcadas con *).';
+                    setTimeout(() => {
+                        if(globalErrorDiv) globalErrorDiv.style.display = 'none';
+                    }, 4000);
+                }
+                return;
+            }
+            
+            // 2. Construir cuerpo del mensaje
+            const emailBody = getFormattedResponses();
+            const encodedSubject = encodeURIComponent(EMAIL_SUBJECT);
+            const encodedBody = encodeURIComponent(emailBody);
+            
+            // 3. Crear mailto URL
+            const mailtoLink = `mailto:${RECIPIENT_EMAIL}?subject=${encodedSubject}&body=${encodedBody}`;
+            
+            // 4. Abrir cliente de correo (método directo)
+            //    Además mostramos un mensaje informativo antes de redirigir
+            const confirmSend = confirm("📧 Se abrirá tu programa de correo con todas las respuestas.\n\nSolo debes presionar 'Enviar'.\n¿Deseas continuar?");
+            if (confirmSend) {
+                window.location.href = mailtoLink;
+                // Mostrar feedback adicional sin interferir (no bloquea)
+                setTimeout(() => {
+                    alert("✅ Se ha abierto el cliente de correo. Si no ocurre nada, revisa la configuración de correo de tu dispositivo.\n\nPuedes copiar manualmente las respuestas si es necesario.");
+                }, 200);
+            }
+        }
+        
+        // Botón reset: limpiar todos los campos (radios y textarea)
+        function resetFormFields() {
+            // Limpiar todos los radio buttons
+            const allRadios = document.querySelectorAll('input[type="radio"]');
+            allRadios.forEach(radio => radio.checked = false);
+            // Limpiar textarea
+            const textareaE = document.getElementById('pregunta_e');
+            if (textareaE) textareaE.value = '';
+            // Limpiar mensajes de error
+            clearErrors();
+            if (globalErrorDiv) globalErrorDiv.style.display = 'none';
+            // Opcional: mostrar un pequeño toast
+            const tempMsg = document.createElement('div');
+            tempMsg.innerText = 'Formulario reiniciado';
+            tempMsg.style.position = 'fixed';
+            tempMsg.style.bottom = '20px';
+            tempMsg.style.left = '50%';
+            tempMsg.style.transform = 'translateX(-50%)';
+            tempMsg.style.backgroundColor = '#1e5c8b';
+            tempMsg.style.color = 'white';
+            tempMsg.style.padding = '0.5rem 1rem';
+            tempMsg.style.borderRadius = '40px';
+            tempMsg.style.fontSize = '0.8rem';
+            tempMsg.style.zIndex = '999';
+            tempMsg.style.opacity = '0.9';
+            document.body.appendChild(tempMsg);
+            setTimeout(() => tempMsg.remove(), 1800);
+        }
+        
+        // Event Listeners
+        sendBtn.addEventListener('click', sendViaEmail);
+        resetBtn.addEventListener('click', resetFormFields);
+        
+        // Opcional: validación visual al cambiar opciones (borrar error al seleccionar)
+        const allRadiosDynamic = document.querySelectorAll('input[type="radio"]');
+        allRadiosDynamic.forEach(radio => {
+            radio.addEventListener('change', function() {
+                // Limpiar error global y específico del grupo correspondiente
+                if (globalErrorDiv) globalErrorDiv.style.display = 'none';
+                const nameAttr = this.getAttribute('name');
+                if (nameAttr === 'pregunta_a' && errorA) errorA.style.display = 'none';
+                if (nameAttr === 'pregunta_b' && errorB) errorB.style.display = 'none';
+                if (nameAttr === 'pregunta_c' && errorC) errorC.style.display = 'none';
+                if (nameAttr === 'pregunta_d' && errorD) errorD.style.display = 'none';
+            });
+        });
+        
+        // Si el usuario escribe en textarea, también se borra error no relacionado
+        const textareaElem = document.getElementById('pregunta_e');
+        if(textareaElem) {
+            textareaElem.addEventListener('input', () => {
+                if(globalErrorDiv) globalErrorDiv.style.display = 'none';
+            });
+        }
+        
+        // Nota: Si quieres cambiar el destinatario, edita la constante RECIPIENT_EMAIL arriba.
+        // También se puede añadir un campo oculto, pero dejamos configurable.
+        console.log("Formulario listo — Modo sin login, envío por correo electrónico directo.");
+    })();
+</script>
+</body>
+</html>
